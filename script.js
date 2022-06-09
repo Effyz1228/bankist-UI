@@ -71,6 +71,42 @@ links.addEventListener('click',function(e){
   }
 })
 
+//a tabbed component
+const tabBtns=document.querySelectorAll('.operations__tab');
+const btnContainer=document.querySelector('.operations__tab-container');
+const tabContent=document.querySelectorAll('.operations__content');
+
+btnContainer.addEventListener('click',function(e){
+  const clicked=e.target.closest('.operations__tab');
+  if(!clicked)return;
+  tabBtns.forEach(btn=>{
+    btn.classList.remove('operations__tab--active')
+  });
+  tabContent.forEach(c=>{
+    c.classList.remove('operations__content--active');
+  })
+  clicked.classList.add('operations__tab--active');
+  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
+})
+
+// btnContainer.addEventListener('click',function(e){
+//   //find the closest element contain this class
+//   const clicked =e.target.closest('.operations__tab');
+//   //guard clause
+//   if(!clicked)return;
+//   //remove active class
+//   tabBtns.forEach(tab=>{
+//     tab.classList.remove('operations__tab--active');
+//   });
+//   tabContent.forEach(c=>{
+//     c.classList.remove('operations__content--active')
+//   });
+//   //active tab
+//   clicked.classList.add('operations__tab--active');
+//   //active content 
+//   document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
+// })
+
 
 
 // lecture:
