@@ -14,6 +14,8 @@ const nav=document.querySelector('.nav');
 const sec1Coords=sec1.getBoundingClientRect();
 const header=document.querySelector('header');
 const navHeight = nav.getBoundingClientRect().height;
+//only select images with this data-src attribute
+const images=document.querySelectorAll('img[data-src]');
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -171,6 +173,30 @@ const sectionObserver=new IntersectionObserver(revealSection,{
 allSections.forEach(sec=>{
   sec.classList.add('section--hidden');
   sectionObserver.observe(sec);
+})
+
+//199 lazy loading images
+const loadImg=(entries,observer)=>{
+  const [entry]=entries;
+  if(!entry.isIntersecting)return;
+  entry.target.src=entry.target.dataset.src;
+
+  entry.target.addEventListener('load',()=>{
+    entry.target.classList.remove('lazy-img');
+  })
+  
+
+  observer.unobserve(entry.target); 
+}
+
+const imgObserver=new IntersectionObserver(loadImg,{
+  root:null,
+  threshold:0,
+  rootMargin:"150px"
+})
+
+images.forEach(img=>{
+  imgObserver.observe(img);
 })
 
 // const changeOpacity=function(e){
