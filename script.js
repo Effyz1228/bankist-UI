@@ -150,6 +150,29 @@ const headerObserver=new IntersectionObserver(navSticky,{
 })
 headerObserver.observe(header);
 
+
+//198 revealing elements on scroll
+const allSections=document.querySelectorAll('.section');
+
+const revealSection=function(entries,observer){
+  const [e]=entries;
+  if(!e.isIntersecting)return;
+  e.target.classList.remove('section--hidden');
+
+  //remove observation
+  observer.unobserve(e.target);
+}
+
+const sectionObserver=new IntersectionObserver(revealSection,{
+  root:null,
+  threshold:0.15
+});
+
+allSections.forEach(sec=>{
+  sec.classList.add('section--hidden');
+  sectionObserver.observe(sec);
+})
+
 // const changeOpacity=function(e){
 //   if(e.target.classList.contains('nav__link')){
 //     const link=e.target;
