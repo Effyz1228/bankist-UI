@@ -7,6 +7,13 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const tabBtns=document.querySelectorAll('.operations__tab');
+const btnContainer=document.querySelector('.operations__tab-container');
+const tabContent=document.querySelectorAll('.operations__content');
+const nav=document.querySelector('.nav');
+const sec1Coords=sec1.getBoundingClientRect();
+const header=document.querySelector('header');
+const navHeight = nav.getBoundingClientRect().height;
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -36,7 +43,7 @@ document.addEventListener('keydown', function (e) {
 
 btnScrollTo.addEventListener('click',e=>{
 const s1coord=sec1.getBoundingClientRect();
-const btnc=btnScrollTo.getBoundingClientRect();
+//const btnc=btnScrollTo.getBoundingClientRect();
 
 //the traditional way:
 window.scrollTo({
@@ -72,10 +79,6 @@ links.addEventListener('click',function(e){
 })
 
 //a tabbed component
-const tabBtns=document.querySelectorAll('.operations__tab');
-const btnContainer=document.querySelector('.operations__tab-container');
-const tabContent=document.querySelectorAll('.operations__content');
-
 btnContainer.addEventListener('click',function(e){
   const clicked=e.target.closest('.operations__tab');
   if(!clicked)return;
@@ -107,6 +110,74 @@ btnContainer.addEventListener('click',function(e){
 //   document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
 // })
 
+//fadeout hover effect (aka passing argument to event handler)
+function hoverEffect(e){
+  if(e.target.classList.contains('nav__link')){
+    const link=e.target;
+    const siblings=link.closest('nav').querySelectorAll('.nav__link');
+    const logo=link.closest('nav').querySelector('img');
+
+    siblings.forEach(s=>{
+      if(s!==link){
+        // console.log(this);
+        s.style.opacity=this;
+      }})
+    logo.style.opacity=this;   
+  }
+}
+
+nav.addEventListener('mouseover',hoverEffect.bind(0.5));
+
+nav.addEventListener('mouseout',hoverEffect.bind(1));
+
+//adding a scroll (the old way)
+// window.addEventListener('scroll',()=>{
+//   if(window.scrollY>sec1Coords.top)nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// })
+
+//the better way
+const navSticky=function(entries){
+  const [e]=entries;
+  if(!e.isIntersecting)nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+}
+
+const headerObserver=new IntersectionObserver(navSticky,{
+  root:null,
+  threshold:0,
+  rootMargin:`-${navHeight}px`
+})
+headerObserver.observe(header);
+
+// const changeOpacity=function(e){
+//   if(e.target.classList.contains('nav__link')){
+//     const link=e.target;
+//     const siblings=link.closest('.nav').querySelectorAll('.nav__link');
+//     const logo=link.closest('.nav').querySelector('img');
+  
+//     siblings.forEach(s=>{
+//       if(s!==link){
+//         s.style.opacity=this;
+//       }
+//       logo.style.opacity=this;
+//     })
+//   }
+// }
+//oneway
+// nav.addEventListener('mouseover',function(e){
+// changeOpacity(e,0.5);
+// })
+
+// nav.addEventListener('mouseout',function(e){
+//   changeOpacity(e,1); 
+// })
+
+//better way
+// nav.addEventListener('mouseover',changeOpacity.bind(0.5))
+
+  
+//   nav.addEventListener('mouseout',changeOpacity.bind(1));
 
 
 // lecture:
@@ -174,3 +245,19 @@ btnContainer.addEventListener('click',function(e){
 // setTimeout(()=>{
 //   sec1.removeEventListener('mouseover',sayHi);
 // },5000);
+
+//197 practicing intersectionobserver
+// const obsCallback=(entries)=>{
+//   const [entry]=entries;
+//     if(entry.isIntersecting){
+//       console.log(entry);
+//       sec1.style.backgroundColor="pink";
+//     }else sec1.style.backgroundColor="blue";
+// };
+// const obsOptions={
+//   root:null,
+//   treshold:0.1
+// };
+
+// const observer=new IntersectionObserver(obsCallback,obsOptions);
+// observer.observe(nav);
